@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TAILOR'S TRAUMA</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;500;800&family=Oswald:wght@700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- DOLENGA AESTHETIC --- */
+        :root {
+            --bg: #F9F9F9;
+            --card: #FFFFFF;
+            --text: #111111;
+            --border: #E5E5E5;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Manrope', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* --- HEADER --- */
+        header {
+            padding: 25px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(249, 249, 249, 0.95);
+            backdrop-filter: blur(10px);
+            position: sticky; top: 0; z-index: 100;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .brand {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+            font-weight: 700;
+        }
+
+        .step-indicator {
+            font-size: 0.7rem;
+            color: #888;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        /* --- CONTAINER --- */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px 20px 120px 20px;
+        }
+
+        .section-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 3.5rem;
+            line-height: 0.9;
+            margin: 20px 0 40px 0;
+            text-transform: uppercase;
+            color: var(--text);
+        }
+
+        /* --- GRIDS & CARDS --- */
+        .grid-clothes { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .grid-fabrics { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            padding: 25px 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            min-height: 120px;
+        }
+
+        .card.selected { 
+            border: 2px solid var(--text); 
+            background: var(--text); 
+            color: white; 
+        }
+        .card.selected .sub-text { color: #aaa; }
+
+        .card-title { font-weight: 800; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 5px; }
+        .sub-text { font-size: 0.65rem; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* --- DESIGN STUDIO --- */
+        .preview-area {
+            width: 100%;
+            height: 350px;
+            background: white;
+            border: 1px solid var(--border);
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #preview-text {
+            font-family: 'Oswald', sans-serif;
+            font-size: 4rem;
+            opacity: 0.05;
+            transform: rotate(-10deg);
+            pointer-events: none;
+        }
+
+        .control-label { font-size: 0.75rem; font-weight: 800; margin-bottom: 15px; letter-spacing: 1px; color: #555; }
+        .color-scroll { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px; }
+        .color-btn { min-width: 50px; height: 50px; border-radius: 50%; border: 1px solid #ddd; cursor: pointer; }
+        
+        .upload-btn {
+            width: 100%; padding: 20px; background: white; border: 1px dashed #999;
+            color: #333; font-family: 'Manrope', sans-serif; font-weight: 600; cursor: pointer; margin-top: 10px;
+        }
+
+        /* --- SLIDER --- */
+        .size-container { background: white; padding: 40px 20px; border: 1px solid var(--border); text-align: center; }
+        .size-big { font-family: 'Oswald', sans-serif; font-size: 6rem; line-height: 1; margin-bottom: 10px; }
+        input[type=range] { width: 100%; height: 2px; background: #ddd; -webkit-appearance: none; outline: none; margin: 30px 0; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 30px; height: 30px; background: var(--text); border-radius: 50%; border: 4px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+
+        /* --- NAVIGATION --- */
+        .nav-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%; padding: 20px;
+            background: white; border-top: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: center; z-index: 100;
+        }
+        .price-tag { font-family: 'Oswald', sans-serif; font-size: 1.5rem; }
+        .next-btn {
+            background: var(--text); color: white; padding: 15px 40px; border: none;
+            font-family: 'Manrope', sans-serif; font-weight: 700; text-transform: uppercase; font-size: 0.8rem;
+        }
+
+        /* --- ENDING PAGE --- */
+        #ending-page {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: white; z-index: 999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; padding: 20px;
+        }
+        .end-logo { font-family: 'Oswald', sans-serif; font-size: 4rem; line-height: 0.9; margin-bottom: 20px; letter-spacing: -2px; color: black; }
+        .end-credit { font-size: 1rem; font-weight: 600; color: #333; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 2px; }
+        .end-sub { font-size: 0.9rem; color: #888; font-weight: 400; }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <header id="main-header">
+        <div class="brand">TAILOR'S TRAUMA</div>
+        <div class="step-indicator" id="step-count">STEP 01/04</div>
+    </header>
+
+    <div class="container" id="main-container">
+
+        <div id="phase-1">
+            <div class="section-title">SELECT<br>SILHOUETTE</div>
+            <div class="grid-clothes">
+                <div class="card" onclick="selectItem('T-Shirt', 1200)"><div class="card-title">T-Shirt</div><div class="sub-text">Boxy Fit</div></div>
+                <div class="card" onclick="selectItem('Hoodie', 2500)"><div class="card-title">Hoodie</div><div class="sub-text">Heavyweight</div></div>
+                <div class="card" onclick="selectItem('Jeans', 3500)"><div class="card-title">Jeans</div><div class="sub-text">Raw Denim</div></div>
+                <div class="card" onclick="selectItem('Shirt', 2000)"><div class="card-title">Shirt</div><div class="sub-text">Formal</div></div>
+                <div class="card" onclick="selectItem('Trousers', 2200)"><div class="card-title">Trousers</div><div class="sub-text">Pleated</div></div>
+                <div class="card" onclick="selectItem('Shorts', 1500)"><div class="card-title">Shorts</div><div class="sub-text">Mesh</div></div>
+                <div class="card" onclick="selectItem('Tracksuit', 4500)"><div class="card-title">Tracksuit</div><div class="sub-text">Technical</div></div>
+                <div class="card" onclick="selectItem('Blazer', 6500)"><div class="card-title">Blazer</div><div class="sub-text">Wool</div></div>
+                <div class="card" onclick="selectItem('Kurta', 1800)"><div class="card-title">Kurta</div><div class="sub-text">Linen</div></div>
+                <div class="card" onclick="selectItem('Pajama', 1200)"><div class="card-title">Pajama</div><div class="sub-text">Cotton</div></div>
+                <div class="card" onclick="selectItem('Nehru Jkt', 3000)"><div class="card-title">Nehru Jkt</div><div class="sub-text">Velvet</div></div>
+                <div class="card" onclick="selectItem('Pathani', 3200)"><div class="card-title">Pathani</div><div class="sub-text">Rugged</div></div>
+                <div class="card" onclick="selectItem('Bandhgala', 7500)"><div class="card-title">Bandhgala</div><div class="sub-text">Royal</div></div>
+                <div class="card" onclick="selectItem('Lungi', 900)"><div class="card-title">Lungi</div><div class="sub-text">Check</div></div>
+                <div class="card" onclick="selectItem('Dhoti', 2500)"><div class="card-title">Dhoti</div><div class="sub-text">Silk</div></div>
+                <div class="card" onclick="selectItem('Sherwani', 12000)"><div class="card-title">Sherwani</div><div class="sub-text">Ceremonial</div></div>
+            </div>
+        </div>
+
+        <div id="phase-2" class="hidden">
+            <div class="section-title">SELECT<br>FABRIC</div>
+            <div class="grid-fabrics">
+                <div class="card" onclick="selectFabric('Cotton', 0)"><div class="card-title">Cotton</div></div>
+                <div class="card" onclick="selectFabric('Polyester', 200)"><div class="card-title">Polyester</div></div>
+                <div class="card" onclick="selectFabric('Blend', 100)"><div class="card-title">Blend</div></div>
+                <div class="card" onclick="selectFabric('Denim', 500)"><div class="card-title">Denim</div></div>
+                <div class="card" onclick="selectFabric('Rayon', 300)"><div class="card-title">Rayon</div></div>
+                <div class="card" onclick="selectFabric('Linen', 600)"><div class="card-title">Linen</div></div>
+                <div class="card" onclick="selectFabric('Wool', 1000)"><div class="card-title">Wool</div></div>
+                <div class="card" onclick="selectFabric('Lycra', 400)"><div class="card-title">Lycra</div></div>
+                <div class="card" onclick="selectFabric('Silk', 1500)"><div class="card-title">Silk</div></div>
+                <div class="card" onclick="selectFabric('Khadi', 100)"><div class="card-title">Khadi</div></div>
+                <div class="card" onclick="selectFabric('Velvet', 1200)"><div class="card-title">Velvet</div></div>
+            </div>
+        </div>
+
+        <div id="phase-3" class="hidden">
+            <div class="section-title">DESIGN<br>LAB</div>
+            <div class="preview-area" id="preview-area">
+                <div id="preview-text">TRAUMA</div>
+                <img id="user-image" style="display:none; max-width: 60%; max-height: 60%; z-index: 10;">
+            </div>
+            <div class="control-label">01. BASE COLORWAY</div>
+            <div class="color-scroll">
+                <div class="color-btn" style="background:#fff;" onclick="setColor('#fff')"></div>
+                <div class="color-btn" style="background:#111;" onclick="setColor('#111')"></div>
+                <div class="color-btn" style="background:#808080;" onclick="setColor('#808080')"></div>
+                <div class="color-btn" style="background:#d4af37;" onclick="setColor('#d4af37')"></div>
+                <div class="color-btn" style="background:#5c2e2e;" onclick="setColor('#5c2e2e')"></div>
+                <div class="color-btn" style="background:#2e3a5c;" onclick="setColor('#2e3a5c')"></div>
+                <div class="color-btn" style="background:#2e5c38;" onclick="setColor('#2e5c38')"></div>
+            </div>
+            <div class="control-label" style="margin-top: 30px;">02. CUSTOM PRINT</div>
+            <input type="file" id="file-upload" class="hidden" accept="image/*" onchange="uploadImage(event)">
+            <button class="upload-btn" onclick="document.getElementById('file-upload').click()">+ Upload Design</button>
+        </div>
+
+        <div id="phase-4" class="hidden">
+            <div class="section-title">PRECISION<br>FIT</div>
+            <div class="size-container">
+                <div class="size-big" id="size-readout">M</div>
+                <div style="color:#888; font-size:0.8rem; letter-spacing:1px; margin-bottom:20px;">STANDARD FIT</div>
+                <input type="range" min="0" max="6" value="2" oninput="updateSize(this.value)">
+                <div style="display:flex; justify-content:space-between; font-weight:800; font-size:0.7rem; margin-top:10px;">
+                    <span>XS</span><span>7XL</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="ending-page" class="hidden">
+        <div class="end-logo">TAILOR'S<br>TRAUMA</div>
+        <div class="end-credit">CREATED BY SHREYAS</div>
+        <div class="end-sub">Thank you for trying out</div>
+    </div>
+
+    <div class="nav-bar" id="nav-bar">
+        <div class="price-tag" id="total-price">₹0</div>
+        <button class="next-btn" id="next-btn" onclick="nextStep()">NEXT STEP</button>
+    </div>
+
+    <script>
+        let step = 1;
+        let basePrice = 0;
+        let fabricPrice = 0;
+        let sizes = ["XS", "S", "M", "L", "XL", "XXL", "7XL"];
+
+        function selectItem(name, price) {
+            basePrice = price;
+            updatePrice();
+            document.querySelectorAll('#phase-1 .card').forEach(c => c.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+            setTimeout(nextStep, 250);
+        }
+
+        function selectFabric(name, price) {
+            fabricPrice = price;
+            updatePrice();
+            document.querySelectorAll('#phase-2 .card').forEach(c => c.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+            setTimeout(nextStep, 250);
+        }
+
+        function setColor(hex) {
+            document.getElementById('preview-area').style.backgroundColor = hex;
+            document.getElementById('preview-text').style.color = (hex === '#111' || hex === '#2e3a5c') ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)';
+        }
+
+        function uploadImage(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    const img = document.getElementById('user-image');
+                    img.src = evt.target.result;
+                    img.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function updateSize(val) {
+            document.getElementById('size-readout').innerText = sizes[val];
+        }
+
+        function updatePrice() {
+            document.getElementById('total-price').innerText = "₹" + (basePrice + fabricPrice);
+        }
+
+        function nextStep() {
+            document.getElementById(`phase-${step}`).classList.add('hidden');
+            step++;
+
+            // IF WE ARE PAST STEP 4, SHOW ENDING PAGE
+            if (step > 4) {
+                // HIDE UI ELEMENTS
+                document.getElementById('main-header').style.display = 'none';
+                document.getElementById('nav-bar').style.display = 'none';
+                document.getElementById('main-container').style.display = 'none';
+                
+                // SHOW ENDING
+                document.getElementById('ending-page').classList.remove('hidden');
+                return;
+            }
+
+            document.getElementById(`phase-${step}`).classList.remove('hidden');
+            document.getElementById('step-count').innerText = `STEP 0${step}/04`;
+
+            if (step === 4) {
+                document.getElementById('next-btn').innerText = "PAY NOW";
+            }
+        }
+    </script>
+</body>
+</html>
